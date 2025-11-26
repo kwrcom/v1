@@ -1,0 +1,160 @@
+# ===========================================
+# MLOps Configuration File
+# Централизованная конфигурация для MLflow, Kafka, моделей и фичей
+# ===========================================
+
+# MLflow Tracking Configuration
+mlflow:
+  # Имя эксперимента для отслеживания обучения моделей
+  experiment_name: fraud_detection
+  
+  # Имя зарегистрированной модели в MLflow Registry
+  registered_model_name: fraud_detection_xgboost
+  
+  # Tracking server URL
+  tracking_uri: http://mlflow:5000
+  
+  # S3/MinIO endpoint для хранения артефактов
+  s3_endpoint_url: http://minio:9000
+  
+  # Расположение артефактов в S3/MinIO
+  artifact_location: s3://mlflow/fraud_detection
+  
+  # Backend store для метаданных (PostgreSQL)
+  backend_store_uri: postgresql://airflow:airflow@postgres/mlflow
+  
+  # Credentials для S3/MinIO
+  aws_access_key_id: minioadmin
+  aws_secret_access_key: minioadmin
+
+# Kafka Configuration
+kafka:
+  # Bootstrap servers для подключения к Kafka кластеру
+  bootstrap_servers: kafka:9092
+  
+  # Kafka credentials (пусто если не требуется аутентификация)
+  username: ""
+  password: ""
+  
+  # Входной топик с транзакциями
+  topic: transactions
+  
+  # Выходной топик с предсказаниями мошенничества
+  output_topic: fraud_predictions
+  
+  # Consumer group ID для обработки транзакций
+  consumer_group_id: fraud_detection_consumer
+  
+  # Конфигурация consumer
+  auto_offset_reset: earliest
+  enable_auto_commit: true
+
+# Model Configuration
+model:
+  # Тип модели для обучения
+  model_type: xgboost
+  
+  # Имя модели
+  name: fraud_detection_xgboost
+  
+  # Версия модели (обновляется автоматически)
+  version: latest
+  
+  # Гиперпараметры XGBoost
+  hyperparameters:
+    max_depth: 6
+    learning_rate: 0.1
+    n_estimators: 100
+    subsample: 0.8
+    colsample_bytree: 0.8
+    min_child_weight: 1
+    gamma: 0
+    reg_alpha: 0
+    reg_lambda: 1
+    scale_pos_weight: 50  # для работы с дисбалансом классов (1-2% мошенничества)
+    objective: binary:logistic
+    eval_metric: auc
+    
+  # Порог классификации для is_fraud (оптимизируется на валидации)
+  classification_threshold: 0.5
+  
+  # Метрики для отслеживания
+  metrics:
+    - auc
+    - precision
+    - recall
+    - f1_score
+    - accuracy
+
+# Feature Engineering Configuration
+features:
+  # Численные фичи
+  numerical_features:
+    - amount
+    - transaction_hour
+    - merchant_risk_score
+    - prev_transaction_count_1h
+    - prev_transaction_count_24h
+    - avg_transaction_amount_7d
+    - total_spent_30d
+    - hours_since_last_transaction
+    - transaction_frequency
+    - amount_deviation
+    - velocity_1h
+    - amount_velocity
+    - user_age
+    - account_balance
+    - credit_score
+  
+  # Категориальные фичи
+  categorical_features:
+    - country
+    - currency
+    - device_type
+    - os
+    - browser
+    - merchant_category
+  
+  # Целевая переменная
+  target: is_fraud
+  
+  # ID колонки
+  id_column: transaction_id
+  
+  # Временная метка
+  timestamp_column: timestamp
+
+# Data Processing Configuration
+data:
+  # Разделение данных
+  train_test_split:
+    test_size: 0.2
+    random_state: 42
+    stratify: true
+  
+  # Параметры валидации
+  validation_split:
+    validation_size: 0.2
+    random_state: 42
+    
+  # Обработка дисбаланса классов
+  class_balance:
+    method: scale_pos_weight  # scale_pos_weight, smote, или undersample
+    target_fraud_rate: 0.02  # ожидаемый процент мошенничества
+
+# Logging Configuration
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+# Airflow DAG Configuration
+airflow:
+  # Расписание обучения модели
+  training_schedule: "0 2 * * *"  # каждый день в 2:00 AM
+  
+  # Расписание inference
+  inference_schedule: "*/5 * * * *"  # каждые 5 минут
+  
+  # Email для уведомлений
+  email_on_failure: false
+  email_on_retry: false

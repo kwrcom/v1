@@ -1,0 +1,40 @@
+# Machine Learning Libraries
+# XGBoost - основной классификатор для обнаружения мошенничества
+xgboost==1.7.6
+
+# CatBoost - альтернативный градиентный бустинг для сравнения моделей
+catboost==1.2
+
+# LightGBM - ещё один градиентный бустинг для сравнения производительности
+lightgbm==4.0.0
+
+# MLflow Integration
+# MLflow - для отслеживания экспериментов и версионирования моделей
+mlflow==2.6.0
+
+# Kafka Integration
+# kafka-python - для работы с потоками данных из Kafka
+kafka-python==2.0.2
+
+# Additional Data Science Libraries
+# Pandas - для обработки данных
+pandas==1.5.3
+
+# NumPy - для численных вычислений
+numpy==1.23.5
+
+# Scikit-learn - для предобработки и метрик
+scikit-learn==1.2.2
+
+# MinIO/S3 Integration
+# boto3 - для работы с S3-совместимым MinIO хранилищем
+boto3==1.28.25
+
+# Kafka Integration (confluent-kafka)
+# confluent-kafka - более производительный клиент для Kafka
+confluent-kafka==2.3.0
+
+# Configuration Management
+# PyYAML - для чтения config.yml
+PyYAML==6.0.1
+

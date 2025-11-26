@@ -1,0 +1,18 @@
+[2025-11-26T10:42:07.232+0000] {manager.py:483} INFO - Processing files using up to 2 processes at a time 
+[2025-11-26T10:42:07.234+0000] {manager.py:484} INFO - Process each file at most once every 30 seconds
+[2025-11-26T10:42:07.237+0000] {manager.py:485} INFO - Checking for new files in /opt/airflow/dags every 300 seconds
+[2025-11-26T10:42:07.239+0000] {manager.py:821} INFO - Searching for files in /opt/airflow/dags
+[2025-11-26T10:42:07.263+0000] {manager.py:824} INFO - There are 0 files in /opt/airflow/dags
+[2025-11-26T11:14:54.589+0000] {manager.py:483} INFO - Processing files using up to 2 processes at a time 
+[2025-11-26T11:14:54.591+0000] {manager.py:484} INFO - Process each file at most once every 30 seconds
+[2025-11-26T11:14:54.593+0000] {manager.py:485} INFO - Checking for new files in /opt/airflow/dags every 300 seconds
+[2025-11-26T11:14:54.595+0000] {manager.py:821} INFO - Searching for files in /opt/airflow/dags
+[2025-11-26T11:14:54.638+0000] {manager.py:824} INFO - There are 1 files in /opt/airflow/dags
+[2025-11-26T11:14:55.323+0000] {manager.py:997} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                           PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run      Last # of DB Queries
+------------------------------------------------  -----  ---------  --------  ----------  --------------  ----------  ----------------------
+/opt/airflow/dags/test_environment_validation.py     38  0.10s             0           0                                                   0
+================================================================================

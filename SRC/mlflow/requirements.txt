@@ -1,0 +1,26 @@
+# MLflow Tracking Server
+# MLflow - основной пакет для отслеживания экспериментов, управления моделями
+mlflow==2.6.0
+
+# Storage Backend Integration
+# boto3 - AWS SDK для работы с S3/MinIO (объектное хранилище моделей и артефактов)
+boto3==1.28.25
+
+# Database Integration
+# psycopg2-binary - PostgreSQL драйвер для хранения метаданных MLflow
+# binary версия не требует компиляции, содержит предкомпилированные библиотеки
+psycopg2-binary==2.9.7
+
+# Security
+# cryptography - для шифрования данных и безопасного хранения учетных данных
+cryptography==41.0.3
+
+# Additional Dependencies
+# PyMySQL - альтернативный драйвер для MySQL (если потребуется)
+pymysql==1.1.0
+
+# Flask - веб-фреймворк (зависимость MLflow)
+Flask==2.3.3
+
+# SQLAlchemy - ORM для работы с базами данных
+SQLAlchemy==2.0.20
