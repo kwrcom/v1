@@ -26,6 +26,12 @@ numpy==1.23.5
 # Scikit-learn - для предобработки и метрик
 scikit-learn==1.2.2
 
+# imbalanced-learn - SMOTE и другие методы балансировки классов
+imbalanced-learn==0.11.0
+
+# Matplotlib for plotting ROC/PR curves
+matplotlib==3.7.2
+
 # MinIO/S3 Integration
 # boto3 - для работы с S3-совместимым MinIO хранилищем
 boto3==1.28.25

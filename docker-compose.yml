@@ -312,6 +312,63 @@ services:
     networks:
       - fraud_detection
 
+  inference:
+    build:
+      context: ./SRC/inference
+      dockerfile: Dockerfile
+    image: realtime_inference:latest
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_TOPIC: transactions
+      OUTPUT_TOPIC: fraud_predictions
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      MODEL_NAME: fraud_detection_xgboost
+      BATCH_SIZE: 128
+      BATCH_WAIT_SECONDS: 1.0
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mlflow:
+        condition: service_healthy
+    restart: always
+    networks:
+      - fraud_detection
+
+  relay:
+    build:
+      context: ./SRC/relay
+      dockerfile: Dockerfile
+    image: fraud_relay:latest
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      OUTPUT_TOPIC: fraud_predictions
+      WS_HOST: 0.0.0.0
+      WS_PORT: 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: always
+    networks:
+      - fraud_detection
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: fraud_frontend:latest
+    environment:
+      NEXT_PUBLIC_WS_URL: ws://relay:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      relay:
+        condition: service_healthy
+    restart: always
+    networks:
+      - fraud_detection
+
 networks:
   fraud_detection:
     driver: bridge
